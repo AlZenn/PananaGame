@@ -6,24 +6,30 @@ using UnityEngine.UI;
 public class BananaController : MonoBehaviour
 {
     [SerializeField] Text Muzzzzzz;
-    public int muz = 0;
-    public int stack= 1;
-    public GameObject errorText;
+    [SerializeField] Text ErrorText;
+
+    [SerializeField] int muz = 0;
+    [SerializeField] int stack = 1;
+    [SerializeField] GameObject errorText;
+    [SerializeField] float timer = 2f;
+    [SerializeField] int needmuz = 100;
+
     void Start()
     {
         errorText.SetActive(false);
-        PlayerPrefs.SetInt("muz", muz);
+
+        // Kaydedilen deðerleri yükleyin
+        muz = PlayerPrefs.GetInt("muz", 0);
+        stack = PlayerPrefs.GetInt("Stack", 1);
+
         Muzzzzzz = GameObject.Find("MuzSayaci").GetComponent<Text>();
-        PlayerPrefs.SetInt("Stack", stack);
+        UpdateMuzText();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        Muzzzzzz.text = PlayerPrefs.GetInt("muz").ToString();
-
+        UpdateMuzText();
         TikliyorumYaaaa();
-        PlayerPrefs.Save();
 
         if (timer > 0)
         {
@@ -33,39 +39,40 @@ public class BananaController : MonoBehaviour
         {
             errorText.SetActive(false);
         }
-
     }
 
-   void TikliyorumYaaaa()
+    void TikliyorumYaaaa()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            muz = muz + (1*stack) ;
+            muz = muz + (1 * stack);
             PlayerPrefs.SetInt("muz", muz);
+            PlayerPrefs.Save();
+            UpdateMuzText();
         }
     }
-    public float timer = 2f;
 
     public void MoreBananaButton()
     {
-        if (muz > 100)
+        if (muz >= (needmuz * stack))
         {
-            stack = PlayerPrefs.GetInt("Stack") + 1;
-            muz = muz - 100;
+            muz -= (needmuz*stack);
+            stack++;
             PlayerPrefs.SetInt("Stack", stack);
+            PlayerPrefs.SetInt("muz", muz);
+            PlayerPrefs.Save(); 
+            UpdateMuzText();
         }
         else
         {
+            ErrorText.text = "Need " + needmuz*stack +" Panana.";
             errorText.SetActive(true);
             timer = 2f;
-
-            
-            
         }
-                    
     }
 
-
-
-
+    void UpdateMuzText()
+    {
+        Muzzzzzz.text = muz.ToString();
+    }
 }

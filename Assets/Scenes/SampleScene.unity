@@ -350,10 +350,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Muzzzzzz: {fileID: 0}
+  ErrorText: {fileID: 21809552}
   muz: 0
   stack: 1
   errorText: {fileID: 21809550}
   timer: 3
+  needmuz: 100
 --- !u!1 &368271709
 GameObject:
   m_ObjectHideFlags: 0
